@@ -8,9 +8,16 @@ const demoFormRoute = require('./src/routes/demoForm.js');
 const appointmentFormRoute = require('./src/routes/appointmentForm.js');
 
 const app = express();
+const PORT = process.env.PORT || 2000;
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // API Routes
@@ -18,5 +25,11 @@ app.use('/api/contact', contactFormRoute);
 app.use('/api/demo', demoFormRoute);
 app.use('/api/appointment', appointmentFormRoute);
 
-// Export the app for Vercel
-module.exports = app;
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
